@@ -1,0 +1,33 @@
+syntax = "proto3";
+package example;
+option java_package = "org.lanseg.demo.proto";
+option go_package = "demo/proto";
+
+// Message
+message Polygon {
+
+  // Nested message with scalar field
+  message Point {
+    double x = 1;
+    double y = 2;
+  }
+
+  // Repeated field (list)
+  repeated Point points = 1;
+  string epsg = 2;
+}
+
+// Enum definition
+enum AreaType {
+  UNKNOWN = 0;
+  PUBLIC = 1;
+  PRIVATE = 2;
+}
+
+message Area {
+  repeated Polygon polygons = 1;
+  AreaType areaType = 2;
+
+  // Reserved fields
+  reserved "location", "owner";
+}

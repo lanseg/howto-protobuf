@@ -1,0 +1,54 @@
+1. https://wiki.openstreetmap.org/wiki/PBF_Format
+2. https://wiki.openstreetmap.org/wiki/Planet.osm
+3. https://wiki.openstreetmap.org/wiki/OSM_XML
+4. https://planet.openstreetmap.org/planet/
+5. https://planet.openstreetmap.org/pbf/
+6. https://protobuf.dev/programming-guides/encoding/#packed
+7. https://github.com/protocolbuffers/protoscope
+8. https://github.com/protocolbuffers/protobuf/blob/main/src/google/protobuf/any.proto
+9. https://itnext.io/protoc-plugins-with-go-52a178dbc27a
+10. https://tex.stackexchange.com/questions/36030/how-to-make-a-single-word-look-as-some-code
+11. https://en.wikipedia.org/wiki/Comparison_of_data-serialization_formats
+12. https://brunocalza.me/what-zero-copy-serialization-means/ 
+
+1. You probably already met protocol buffers - a description and serialization
+format focused on performance, uniformity and versioning. For example, when you
+work with with OSM data, you could notice that data in PBF[1] format is almost
+two times smaller than the same data encoded in compressed XML: 146G [4] for an
+XML and 79G [5] for the protocol buffers. And this file will be readable into 
+the same object despite different OS, architectures, bitness or endiannes. 
+
+2. But what makes those files so small? Of course, binary encoding - it's not 
+human readable like xml, json, or yaml, but reduces overhead by keeping field
+IDs and field values instead of their string representation. It also groups
+repeated scalar types, when length is defined only for the whole sequence 
+instead of adding field length for each element.
+
+3. Protocol buffers have quite good backward and forward compatibility if used
+properly: with deprecated and reserved fields. When you change the proto file,
+it's a good practice not to remove obsolete fields, but mark them as deprecated
+for a sake of backwards compatibility, or reserved - that is a more strict 
+version of the "deprecation" when the field with given number is ignored and not
+accessible from the code even if it exists in the file.
+
+4. Generation process. Protoc parses the schema definition, validates the syntax
+and message  definitions. Then the generated schema definition is passed to the
+plugin which generates a language files that operate protobuf data. 
+There are well-known formats, like "C++, Java, Go, C#, or Python", and there are
+custom specialized plugins.
+
+5. Version history. Proto2, Proto3
+There are two versions of the protocol buffers which are used now: Proto2 and 
+Proto3. While, proto2 is still very popular, proto3 has some of the neat 
+features. I'd recommend to use proto3, but decision is on you.
+Proto2                       | Proto3 
+Optional and required fields | All fields are optional
+Can define default values    | 0 for numbers, "" for strings, false for bool
+Enums can start with > 0     | Must start with 0
+Maps are not supported       | Maps are supported
+Non-utf8 encoding for string | Only UTF8 for strings
+
+6. Editions:
+
+7. Use case and examples. 
+
