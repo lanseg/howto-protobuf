@@ -1,20 +1,5 @@
 import schema_pb2
 
-# swissBounds := &dpb.Area{
-# 	AreaType: dpb.AreaType_PUBLIC,
-# 	Polygons: []*dpb.Polygon{
-# 		{
-# 			Points: []*dpb.Polygon_Point{
-# 				{X: 5.306396, Y: 45.660127},
-# 				{X: 10.843506, Y: 45.660127},
-# 				{X: 10.843506, Y: 47.798397},
-# 				{X: 5.306396, Y: 47.798397},
-# 				{X: 5.306396, Y: 45.660127},
-# 			},
-# 			Epsg: "2056",
-# 		},
-# 	},
-# }
 
 if __name__ == "__main__":
     swissBounds = schema_pb2.Area(
