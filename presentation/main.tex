@@ -173,13 +173,35 @@ swissBounds := &dpb.Area{
 
 \begin{frame}[fragile]{Language-specific code: Java}
 \begin{lstlisting}[language=java,caption={Create and access proto message in Java}]
-// Java code
+var swissBounds = Schema.Area.newBuilder()
+    .setAreaType(Schema.AreaType.PUBLIC)
+    .addPolygons(
+        Polygon.newBuilder()
+            .setEpsg("2056")
+            .addPoints(Point.newBuilder().setX(5.306396).setY(45.660127))
+            .addPoints(Point.newBuilder().setX(10.843506).setY(45.660127))
+            .addPoints(Point.newBuilder().setX(10.843506).setY(47.798397))
+            .addPoints(Point.newBuilder().setX(5.306396).setY(47.798397))
+            .addPoints(Point.newBuilder().setX(5.306396).setY(45.660127)))
+    .build();
 \end{lstlisting}
 \end{frame}
 
 \begin{frame}[fragile]{Language-specific code: Python}
 \begin{lstlisting}[language=python,caption={Create and access proto message in Python}]
-# Python code
+swissBounds = schema_pb2.Area(
+    areaType=schema_pb2.PUBLIC,
+    polygons=[
+        schema_pb2.Polygon(
+            points=[
+                schema_pb2.Polygon.Point(x=0, y=0),
+                schema_pb2.Polygon.Point(x=1, y=1),
+            ],
+            epsg="2056",
+        ),
+    ],
+)
+print(swissBounds)
 \end{lstlisting}
 \end{frame}
 
