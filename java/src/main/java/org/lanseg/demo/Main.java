@@ -1,5 +1,7 @@
 package org.lanseg.demo;
 
+import java.io.FileOutputStream;
+
 import org.lanseg.demo.proto.Schema;
 import org.lanseg.demo.proto.Schema.Polygon;
 import org.lanseg.demo.proto.Schema.Polygon.Point;
@@ -17,6 +19,10 @@ public class Main {
                 .addPoints(Point.newBuilder().setX(5.306396).setY(47.798397))
                 .addPoints(Point.newBuilder().setX(5.306396).setY(45.660127)))
         .build();
-    System.out.println("HELLO " + swissBounds);
+
+    System.out.printf("Message: %s\n", swissBounds);
+    try (var out = new FileOutputStream("java_output.binarypb")) {
+      swissBounds.writeTo(out);
+    }
   }
 }
