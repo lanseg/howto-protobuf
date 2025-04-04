@@ -59,13 +59,15 @@
 \end{frame}
 
 % Size comparisons
-\begin{frame}[fragile]{Overview}
-  \begin{tikzpicture}[node distance=2.5cm]\tiny
-    \node (proto) [process] {Proto file defines data structure};
-    \node (parsed) [maybe, dashed, right of=proto] {Parsed protobuf file };
-    \node (lang) [process, right of=parsed] {Language-specific code };
-    \node (bincode) [final, right of=lang] {Binary data};
-  \end{tikzpicture}
+\begin{frame}[fragile]{Protobuf pipeline}
+  \begin{center}
+    \begin{tikzpicture}[node distance=2.5cm]\tiny
+      \node (proto) [maybe, dashed] {Proto text file };
+      \node (compiler) [process, right of=proto] {Proto file defines data structure};
+      \node (parsed) [maybe, dashed, right of=compiler] {Parsed protobuf file };
+      \node (lang) [process, right of=parsed] {Generator plugin};
+    \end{tikzpicture}
+  \end{center}
 \end{frame}
 
 \begin{frame}[fragile]{Proto file: Syntax}
@@ -103,51 +105,36 @@ message Area {
 \end{lstlisting}
 \end{frame}
 
-% Syntax variants
-\begin{frame}{Proto file: Syntax variants}
-  \begin{center}
-    \begin{tabular}{ l l }
-      Proto 2 & Proto 3 \\
-      \hline
-      \code{required} and \code{optional} & everything is optional \\
-      \code{default} values & no default values \\
-      packed repeated opt-in & packed repeated by default \\
-      extensions & no extensions \\
-      enums can be unset & enums must have default zero value
-    \end{tabular}
-  \end{center}
-\end{frame}
-
-% Codegen
-\begin{frame}[fragile]{Proto file: ``Editions''}
-Feature flags control feature state, for example, the ``Opaque api''
-\begin{lstlisting}[caption={Protobuf definition}]
-edition = "2023";
-import "google/protobuf/go_features.proto";
-option features.(pb.go).api_level = API_OPAQUE;
-
-message Object {
-  string name = 1;
-  int64 value = 2;
+\begin{frame}[fragile]{Parsed proto file}
+\begin{lstlisting}[caption={Parsed protobuf file}]
+file_to_generate: "schema.proto"
+compiler_version {
+  major: 6
+  minor: 31
+  patch: 0
+  suffix: "-dev"
 }
+proto_file {
+  name: "schema.proto"
+  package: "example"
+  message_type {
+    name: "Polygon"
+    field {
+      name: "points"
+      number: 1
+      label: LABEL_REPEATED
+      type: TYPE_MESSAGE
+      type_name: ".example.Polygon.Point"
+      json_name: "points"
+    }
+    field {
+      name: "epsg"
+      number: 2
+      label: LABEL_OPTIONAL
+      type: TYPE_STRING
+      json_name: "epsg"
+    }
 \end{lstlisting}
-
-\begin{minipage}{.49\textwidth}
-\begin{lstlisting}[language=go,caption={Mutable}]
-obj := &dpb.Object{
-  Id:     strptr("objectId"),
-  Parent: strptr("objectParent"),
-}
-\end{lstlisting}
-\end{minipage}
-\begin{minipage}{.49\textwidth}
-\begin{lstlisting}[language=go,caption={Immutable},numbers=none]
-obj := dpb.Object_builder{
-  Id:     strptr("objectId"),
-  Parent: strptr("objectParent"),
-}.Build()
-\end{lstlisting}
-\end{minipage}
 \end{frame}
 
 % Codegen
@@ -205,6 +192,53 @@ print(swissBounds)
 \end{lstlisting}
 \end{frame}
 
+% Syntax variants
+\begin{frame}{Proto file: Syntax variants}
+  \begin{center}
+    \begin{tabular}{ l l }
+      Proto 2 & Proto 3 \\
+      \hline
+      \code{required} and \code{optional} & everything is optional \\
+      \code{default} values & no default values \\
+      packed repeated opt-in & packed repeated by default \\
+      extensions & no extensions \\
+      enums can be unset & enums must have default zero value
+    \end{tabular}
+  \end{center}
+\end{frame}
+
+% Codegen
+\begin{frame}[fragile]{Proto file: ``Editions''}
+Feature flags control feature state, for example, the ``Opaque api''
+\begin{lstlisting}[caption={Protobuf definition}]
+edition = "2023";
+import "google/protobuf/go_features.proto";
+option features.(pb.go).api_level = API_OPAQUE;
+
+message Object {
+  string name = 1;
+  int64 value = 2;
+}
+\end{lstlisting}
+
+\begin{minipage}{.49\textwidth}
+\begin{lstlisting}[language=go,caption={Mutable}]
+obj := &dpb.Object{
+  Id:     strptr("objectId"),
+  Parent: strptr("objectParent"),
+}
+\end{lstlisting}
+\end{minipage}
+\begin{minipage}{.49\textwidth}
+\begin{lstlisting}[language=go,caption={Immutable},numbers=none]
+obj := dpb.Object_builder{
+  Id:     strptr("objectId"),
+  Parent: strptr("objectParent"),
+}.Build()
+\end{lstlisting}
+\end{minipage}
+\end{frame}
+
 \begin{frame}{Limitations}
 \begin{itemize}[label=\Sey{}]
 \item Removing fields is difficult
@@ -213,10 +247,6 @@ print(swissBounds)
 \item No schema file in the binary file
 \item \textasciitilde2GiB size limit for a message in binary form
 \end{itemize}
-\end{frame}
-
-\begin{frame}{Dealing with limitations}
-
 \end{frame}
 
 % TODO: color the cells
@@ -239,12 +269,16 @@ print(swissBounds)
 But there is more...
 \end{frame}
 
-\begin{frame}{Protoc plugins}
-Frame 4
+\begin{frame}{GRPC}
+One of the most popular RPC frameworks
 \end{frame}
 
-\begin{frame}{GRPC}
-Examples
+\begin{frame}{OpenStreetMap PBF file format}
+It's not just `binary proto`!
+\end{frame}
+
+\begin{frame}{Custom plugins}
+Writing code parsers for corner cases and rare languages
 \end{frame}
 
 \end{document}
