@@ -32,8 +32,8 @@ version of the "deprecation" when the field with given number is ignored and not
 accessible from the code even if it exists in the file.
 
 4. Generation process. Protoc parses the schema definition, validates the syntax
-and message  definitions. Then the generated schema definition is passed to the
-plugin which generates a language files that operate protobuf data. 
+and message definitions. Then the generated schema definition (whuch is also 
+proto) is passed to the plugin and the plugin generates a language files. 
 There are well-known formats, like "C++, Java, Go, C#, or Python", and there are
 custom specialized plugins.
 
@@ -50,5 +50,5 @@ Non-utf8 encoding for string | Only UTF8 for strings
 
 6. Editions:
 
-7. Use case and examples. 
+7. Use case and examples:
 
