@@ -52,3 +52,4 @@ Non-utf8 encoding for string | Only UTF8 for strings
 
 7. Use case and examples:
 
+
