@@ -6,40 +6,49 @@
 \usepackage{tikz}
 \usepackage{tikzsymbols}
 
+% Configuring tikz style
 \usetikzlibrary{shapes.geometric, shapes.symbols, arrows}
 \tikzstyle{process} = [signal,  text width=1.5cm, minimum height=1.5cm,text centered, draw=black, fill=green!30]
 \tikzstyle{maybe} = [signal,  text width=1.5cm, minimum height=1.5cm,text centered, draw=black ]
-\tikzstyle{final} =  [rectangle, text width=1.5cm, minimum height=1.5cm,text centered, draw=black ]
-\tikzstyle{arrow} = [thick,->,>=stealth]
 
+% Configuring lstlisting code style
 \definecolor{codegreen}{rgb}{0,0.6,0}
 \definecolor{codegray}{rgb}{0.5,0.5,0.5}
-\definecolor{codepurple}{rgb}{0.58,0,0.82}
 \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
 
 \lstdefinestyle{mystyle}{
   backgroundcolor=\color{backcolour},
   commentstyle=\color{codegreen},
-  keywordstyle=\color{magenta},
+  keywordstyle=\color{ctcorange},
   numberstyle=\tiny\color{codegray},
-  stringstyle=\color{codepurple},
+  stringstyle=\color{purple},
   basicstyle=\ttfamily\footnotesize\tiny,
-  breakatwhitespace=false,
-  breaklines=true,
   captionpos=b,
   keepspaces=true,
   numbers=left,
   numbersep=5pt,
-  showspaces=false,
-  showstringspaces=false,
-  showtabs=false,
-  tabsize=2
 }
 
+% Configuring protobuf code coloring style
+\lstdefinelanguage{protobuf}{
+    keywords={import, message, enum, syntax, option, repeated, reserved},
+    morecomment=[s][\color{ctcorange}]{string}{\ },
+    sensitive=false, % keywords are not case-sensitive
+    morecomment=[l]{//}, % l is for line comment
+    morestring=[b]" % defines that strings are enclosed in double quotes
+} %
 \lstset{style=mystyle}
-\usetheme{default}
 
-\title{Efficient Data Serialization with Protocol Buffers}
+% Configuring Camptocamp colors
+\usetheme{default}
+\definecolor{ctcorange}{HTML}{FF680A}
+\definecolor{ctcgray}{HTML}{7A7F82}
+\setbeamercolor*{palette primary}{use=structure,fg=ctcorange,bg=white}
+\setbeamercolor{titlelike}{parent=ctcorange,fg=structure.fg!50!black}
+\setbeamercolor{frametitle}{bg=ctcgray!10!white,fg=ctcorange}
+\setbeamercolor*{titlelike}{parent=palette primary}
+
+\title{Data Serialization with Protocol Buffers}
 \author{Andrey Rusakov}
 \date{\today}
 
@@ -71,9 +80,8 @@
 \end{frame}
 
 \begin{frame}[fragile]{Proto file: Syntax}
-\begin{lstlisting}[caption={Typical protocol buffer file}]
+\begin{lstlisting}[language=protobuf, caption={Typical protocol buffer file}]
 syntax = "proto3";
-package example;
 option go_package = "demo/proto";
 
 // Message
@@ -106,7 +114,7 @@ message Area {
 \end{frame}
 
 \begin{frame}[fragile]{Parsed proto file}
-\begin{lstlisting}[caption={Parsed protobuf file}]
+\begin{lstlisting}[language=protobuf, caption={Parsed protobuf file}]
 file_to_generate: "schema.proto"
 compiler_version {
   major: 6
@@ -171,11 +179,11 @@ var swissBounds = Schema.Area.newBuilder()
             .addPoints(Point.newBuilder().setX(5.306396).setY(47.798397))
             .addPoints(Point.newBuilder().setX(5.306396).setY(45.660127)))
     .build();
-\end{lstlisting}
+\end{lstlisting}\lstset{style=mystyle}
 \end{frame}
 
 \begin{frame}[fragile]{Language-specific code: Python}
-\begin{lstlisting}[language=python,caption={Create and access proto message in Python}]
+\begin{lstlisting}[language=Python,caption={Create and access proto message in Python}]
 swissBounds = schema_pb2.Area(
     areaType=schema_pb2.PUBLIC,
     polygons=[
@@ -186,9 +194,7 @@ swissBounds = schema_pb2.Area(
             ],
             epsg="2056",
         ),
-    ],
-)
-print(swissBounds)
+    ])
 \end{lstlisting}
 \end{frame}
 
