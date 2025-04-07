@@ -7,11 +7,17 @@ clean:
 	$(MAKE) -C plugin clean
 	$(MAKE) -C presentation clean
 
-.PHONY: all
-all:
+.PHONY: snippets
+snippets:
 	$(MAKE) -C proto all
 	$(MAKE) -C go all
 	$(MAKE) -C python all
 	$(MAKE) -C java all
 	$(MAKE) -C plugin all
+
+.PHONY: presentation
+presentation:
 	$(MAKE) -C presentation all
+
+.PHONY: all
+all: snippets presentation

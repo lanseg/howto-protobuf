@@ -31,8 +31,8 @@ open=true
 order=0
 
 [view-settings,view=0,item:main.tex]
-CursorColumn=30
-CursorLine=141
+CursorColumn=18
+CursorLine=279
 Dynamic Word Wrap=false
 JumpList=
 TextFolding=[]
